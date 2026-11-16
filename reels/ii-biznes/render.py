@@ -61,18 +61,18 @@ for i, s in enumerate(S):
 # ---------------- captions ----------------
 # (t0, t1, text, style, y) style: white|yellow|box|big
 C = []
-def cap(t0, t1, text, style='white', y=0.17, size=96):
-    C.append(dict(t0=t0, t1=t1, text=text, style=style, y=y, size=size))
+def cap(t0, t1, text, style='white', y=0.17, size=96, count=None):
+    C.append(dict(t0=t0, t1=t1, text=text, style=style, y=y, size=size, count=count))
 
-cap(R(0.35), R(1.75), '8 ИЗ 10', 'big', .16, 230)
+cap(R(0.35), R(1.75), '{n} ИЗ 10', 'big', .16, 230, count=(1, 8, .6))
 cap(R(1.0),  R(1.75), 'КОМПАНИЙ', 'box', .29, 92)
 cap(R(1.85), R(3.70), 'УЖЕ ВНЕДРИЛИ ИИ', 'white', .12, 92)
 cap(R(3.85), R(4.6),  'СПОЙЛЕР:', 'box', .12, 84)
 cap(R(4.6),  R(5.70), 'ДЕЛО В ДЕНЬГАХ', 'yellow', .21, 110)
 cap(R(6.75), R(9.20), 'МЕНЕДЖЕР', 'white', .10, 90)
-cap(R(7.9),  R(9.20), '20 МИНУТ', 'big', .18, 190)
+cap(R(7.9),  R(9.20), '{n} МИНУТ', 'big', .18, 190, count=(1, 20, .7))
 cap(R(9.30), R(11.0), 'ИИ', 'box', .10, 100)
-cap(R(9.9),  R(11.0), '3 СЕКУНДЫ', 'big', .19, 170)
+cap(R(9.9),  R(11.0), '{n} СЕКУНДЫ', 'big', .19, 170, count=(20, 3, .35))
 cap(R(11.1), R(12.7), 'НОЧЬЮ', 'yellow', .10, 120)
 cap(R(11.8), R(12.7), 'И В ВЫХОДНЫЕ', 'white', .18, 96)
 cap(R(14.7), R(16.0), 'ДЕНЬ РАБОТЫ', 'white', .11, 100)
@@ -257,6 +257,144 @@ def render_shot(s, t):
     box = (cx - cw / 2, cy - ch / 2, cx + cw / 2, cy + ch / 2)
     return base.resize((W, H), Image.BILINEAR, box=box)
 
+# ---------------- stickers & motion ----------------
+# sticker: (t0, t1, name, x, y, width_frac, rot, motion)  motion: wobble|float|spin|pulse
+ST = []
+def stk(t0, t1, name, x, y, w=.24, rot=0, mo='wobble', d=0.0):
+    ST.append(dict(t0=t0 + d, t1=t1, name=name, x=x, y=y, w=w, rot=rot, mo=mo))
+
+stk(R(0.9), R(1.75), 'A1', .82, .80, .26, 10)                     # robot: AI
+stk(R(2.3), R(3.70), 'A4', .16, .36, .16, -12, 'pulse')           # shock lightning
+stk(R(4.6), R(5.70), 'A3', .22, .36, .28, -14)                    # cash: «деньги»
+stk(R(5.75), R(6.60), 'B8', .5, .70, .30, 0, 'pulse')             # look card
+stk(R(7.0), R(9.20), 'A5', .82, .80, .24, 12, 'shake')            # alarm clock: slow manager
+stk(R(9.9), R(11.0), 'A4', .85, .33, .16, 14, 'pulse')            # lightning: 3 s
+stk(R(10.3), R(11.0), 'B4', .17, .80, .2, -8)                      # done
+stk(R(11.1), R(12.7), 'A9', .83, .30, .24, 0, 'float')            # moon: night
+stk(R(12.9), R(14.6), 'A4', .16, .80, .22, -15, 'spin')
+stk(R(13.1), R(14.6), 'A2', .84, .82, .24, 12)
+stk(R(16.1), R(17.6), 'A4', .82, .80, .2, 15, 'pulse')
+stk(R(17.8), R(19.5), 'A3', .2, .82, .3, -12)
+stk(R(18.0), R(19.5), 'A8', .82, .80, .22, 10, 'spin')
+stk(R(19.7), R(21.0), 'B4', .84, .58, .16, 6)
+stk(R(20.1), R(21.0), 'B4', .70, .50, .13, -6)
+stk(R(21.1), R(22.5), 'A3', .2, .36, .26, -10)
+stk(R(22.7), R(24.4), 'A6', .18, .82, .28, -8)
+stk(R(22.9), R(24.4), 'B5', .84, .80, .24, 10)
+stk(R(24.6), R(25.8), 'B1', .82, .24, .18, 8, 'float')
+stk(R(25.0), R(25.8), 'B1', .17, .25, .15, -8, 'float')
+stk(R(26.0), R(27.0), 'B4', .84, .86, .22, 8)
+stk(R(27.1), R(28.05), 'B7', .82, .33, .2, 8, 'pulse')
+stk(R(28.3), R(29.6), 'B9', .18, .30, .22, -10, 'shake')
+stk(R(29.8), R(31.05), 'B7', .16, .30, .18, -8, 'pulse')
+stk(R(31.4), R(33.25), 'B6', .14, .58, .14, -14)
+stk(R(31.8), R(33.25), 'B6', .86, .62, .12, 14)
+stk(R(33.5), R(35.4), 'B5', .84, .30, .22, 10, 'float')
+stk(R(35.6), R(36.95), 'B1', .80, .27, .2, 8, 'float')
+stk(R(37.65), R(38.05), 'B4', .84, .58, .18, 8)
+stk(R(38.2), R(39.4), 'B8', .18, .32, .24, -8, 'float')
+stk(R(39.6), 41.3, 'A6', .82, .30, .22, 8)
+stk(41.5, TOTAL, 'A1', .18, .87, .30, -8, 'float')
+stk(41.7, TOTAL, 'A7', .83, .87, .30, 10, 'float')
+
+# particles: coin rain / flying docs / speed lines
+PT = [dict(kind='coins', t0=R(4.4), t1=R(5.70), xr=(.04, .48)), dict(kind='coins', t0=R(21.05), t1=R(22.5), xr=(.04, .48)),
+      dict(kind='coins', t0=R(17.6), t1=R(19.5)),
+      dict(kind='docs', t0=R(14.6), t1=R(16.0)), dict(kind='speed', t0=R(29.6), t1=R(31.05)),
+      dict(kind='speed', t0=R(33.25), t1=R(35.4)), dict(kind='speed', t0=R(9.2), t1=R(11.0))]
+# camera shake windows: (t0, t1, amplitude px@1080)
+SHAKE = [(R(7.9), R(8.5), 10), (R(28.1), R(28.6), 12), (R(29.6), R(31.05), 7), (R(33.25), R(33.9), 14),
+         (R(4.6), R(5.0), 10)]
+
+_st = {}
+def sticker(name, w):
+    k = (name, w)
+    if k not in _st:
+        im = Image.open(f'{WD}/st/{name}.png').convert('RGBA')
+        tw = max(4, int(W * w))
+        im = im.resize((tw, max(4, int(im.height * tw / im.width))), Image.LANCZOS)
+        # drop shadow baked in
+        sh = Image.new('RGBA', (im.width + 40, im.height + 40), (0, 0, 0, 0))
+        a = im.split()[3].point(lambda v: v * 0.45)
+        blk = Image.new('RGBA', im.size, (0, 0, 0, 255)); blk.putalpha(a)
+        sh.alpha_composite(blk, (14, 22)); sh = sh.filter(ImageFilter.GaussianBlur(8))
+        sh.alpha_composite(im, (6, 6))
+        _st[k] = sh
+    return _st[k]
+
+def paste_center(im, spr, x, y, scale=1.0, rot=0.0):
+    if scale <= 0.02:
+        return
+    s = spr
+    if abs(scale - 1) > 1e-3:
+        s = s.resize((max(2, int(s.width * scale)), max(2, int(s.height * scale))), Image.BILINEAR)
+    if abs(rot) > 0.2:
+        s = s.rotate(rot, resample=Image.BILINEAR, expand=True)
+    _safe_paste(im, s, int(x - s.width / 2), int(y - s.height / 2))
+
+def _safe_paste(im, s, px, py):
+    # alpha_composite needs non-negative dest; crop sprite when off-canvas
+    sx, sy = max(0, -px), max(0, -py)
+    if sx >= s.width or sy >= s.height or px >= im.width or py >= im.height:
+        return
+    s = s.crop((sx, sy, min(s.width, im.width - px + sx), min(s.height, im.height - py + sy)))
+    im.alpha_composite(s, (max(px, 0), max(py, 0)))
+
+def draw_stickers(im, t):
+    for s in ST:
+        if not (s['t0'] <= t < s['t1']):
+            continue
+        lt = t - s['t0']
+        x = lt / .28
+        sc = 0 if x <= 0 else (pop(x) * ease_out(x) if x < 1 else 1.0)
+        rot = s['rot'] + (1 - ease_out(x)) * -35 * (1 if s['rot'] >= 0 else -1)
+        dx = dy = 0
+        mo = s['mo']
+        if mo == 'wobble':
+            rot += 4 * math.sin(lt * 6)
+        elif mo == 'float':
+            dy = 12 * SC * math.sin(lt * 4); rot += 3 * math.sin(lt * 3)
+        elif mo == 'pulse':
+            sc *= 1 + 0.08 * math.sin(lt * 14)
+        elif mo == 'spin':
+            rot += lt * 90
+        elif mo == 'shake':
+            rot += 9 * math.sin(lt * 40); dx = 4 * SC * math.sin(lt * 53)
+        paste_center(im, sticker(s['name'], s['w']), s['x'] * W + dx, s['y'] * H + dy, sc, rot)
+
+def draw_particles(im, t):
+    for p in PT:
+        if not (p['t0'] <= t < p['t1']):
+            continue
+        lt = t - p['t0']
+        if p['kind'] == 'coins':
+            rng = np.random.default_rng(int(p['t0'] * 100))
+            for k in range(14):
+                x0 = rng.uniform(*p.get('xr', (.05, .95))) * W; delay = rng.uniform(0, .6); spd = rng.uniform(.9, 1.5) * H
+                y = -150 * SC + (lt - delay) * spd
+                if lt < delay or y > H + 100: continue
+                paste_center(im, sticker('A8', rng.uniform(.07, .11)), x0 + 30 * SC * math.sin(lt * 5 + k), y, 1.0, lt * rng.uniform(-300, 300))
+        elif p['kind'] == 'docs':
+            for k in range(4):
+                q = ((lt - k * .25) / .7)
+                if q <= 0 or q >= 1: continue
+                x = (-.1 + 0.75 * q) * W; y = (.80 + .05 * math.sin(q * 3 + k) - .12 * q) * H
+                paste_center(im, sticker('B3', .16), x, y, 1 - .4 * q, -30 + 60 * q)
+        elif p['kind'] == 'speed':
+            d = ImageDraw.Draw(im)
+            rng = np.random.default_rng(int(p['t0'] * 10))
+            for k in range(18):
+                y = rng.uniform(.25, .95) * H; L = rng.uniform(.15, .4) * W
+                x = ((rng.uniform(0, 1) + lt * rng.uniform(2.5, 4)) % 1.4 - .2) * W
+                d.line((x, y, x + L, y), fill=(255, 255, 255, 150), width=max(2, int(rng.uniform(4, 9) * SC)))
+
+def shake_offset(t):
+    for t0, t1, a in SHAKE:
+        if t0 <= t < t1:
+            k = 1 - (t - t0) / (t1 - t0) * 0.5
+            return int(a * SC * k * math.sin(t * 91)), int(a * SC * k * math.cos(t * 77))
+    return 0, 0
+
 def frame(t):
     i = max(j for j, s in enumerate(S) if s['t'] <= t + 1e-9)
     s = S[i]
@@ -278,12 +416,18 @@ def frame(t):
             im = im.resize((W, H), Image.BILINEAR, box=((W - cw) / 2, (H - ch) / 2, (W + cw) / 2, (H + ch) / 2))
             a = (1 - p) * 0.55
             im = Image.blend(im, Image.new('RGB', (W, H), (255, 255, 255)), a)
-    # captions
     im = im.convert('RGBA')
+    draw_particles(im, t)
+    draw_stickers(im, t)
+    # captions
     for c in C:
         if c['t0'] <= t < c['t1']:
             x = (t - c['t0']) / .2
-            ti = text_img(c['text'], c['style'], c['size'], W * .92)
+            txt = c['text']
+            if c.get('count'):
+                a, b, dd = c['count']
+                txt = txt.format(n=int(round(a + (b - a) * ease_out((t - c['t0']) / dd))))
+            ti = text_img(txt, c['style'], c['size'], W * .92)
             sc = pop(x) * (0.55 + 0.45 * ease_out(x))
             if sc != 1:
                 ti2 = ti.resize((max(1, int(ti.width * sc)), max(1, int(ti.height * sc))), Image.BILINEAR)
@@ -298,6 +442,10 @@ def frame(t):
                 y = c['y'] * H
                 x0 = W / 2 - ti.width / 2 + 20 * SC
                 d.line((x0, y + 10 * SC, x0 + (ti.width - 40 * SC) * q, y - 10 * SC), fill=(239, 68, 68, 255), width=int(18 * SC))
+    dx, dy = shake_offset(t)
+    if dx or dy:
+        m = 18 * SC
+        im = im.resize((W, H), Image.BILINEAR, box=(m + dx, m + dy, W - m + dx, H - m + dy))
     return im.convert('RGB')
 
 if __name__ == '__main__':
@@ -316,6 +464,6 @@ if __name__ == '__main__':
         p.stdin.write(frame(k / FPS).tobytes())
     p.stdin.close(); p.wait()
     # cut times for sfx
-    json.dump(dict(cuts=[s['t'] for s in S[1:]], caps=[c['t0'] for c in C],
+    json.dump(dict(cuts=[s['t'] for s in S[1:]], caps=[c['t0'] for c in C] + [x['t0'] for x in ST],
                    cards=[s['t'] for s in S if ':' in s['panel'] or s['panel'] == 'final']),
               open(OUT + '.cues.json', 'w'))
