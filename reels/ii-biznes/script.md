@@ -17,3 +17,8 @@
 
 ## Что изменено против прошлой версии
 Новый текст по просьбе владельца: почему бизнес внедряет ИИ + призыв «напишите слово БИЗНЕС». Голос ускорен, склейки каждые ~1,5–2 с.
+
+## Версия UZ (озвучка, eleven_v4, language uz, голос-клон, темп ×1,10)
+[excited] Nega har o'nta kompaniyadan sakkiztasi sun'iy intellektni allaqachon ishga tushirdi? Spoyler: gap modada emas. Gap pulda. Qarang. Menejer mijozga yigirma daqiqada javob beradi. Sun'iy intellekt esa uch soniyada. Kechasi ham, dam olish kunlari ham. Birinchi sabab: tezlik. Bir kunlik ish endi bir necha daqiqada bitadi. Ikkinchi sabab: tejash. Zerikarli ishni mashina qiladi, odamlar esa pul topish bilan band. Uchinchi sabab: sotuv. Sun'iy intellekt har bir mijozni eslab qoladi va birorta ham buyurtmani yo'qotmaydi. [sarcastic] Siz o'ylab yurganingizda, raqobatchingiz allaqachon boshlab yubordi. Savol kerakmi, yo'qmi, unda emas. Savol: qachon boshlaysiz? [excited] Izohlarga BIZNES deb yozing, biz aynan sizning biznesingiz uchun yechim topib beramiz.
+
+Сборка: `python3 render_uz.py <work> video_uz.mp4 1.0 && python3 mix.py <work> video_uz.mp4 voice-uz.mp3 1.10 mix_uz.wav`

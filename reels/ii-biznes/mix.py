@@ -4,7 +4,11 @@ import sys, json, subprocess, wave
 import numpy as np
 
 WD = sys.argv[1]
-cues = json.load(open(f'{WD}/video.mp4.cues.json'))
+VID = sys.argv[2] if len(sys.argv) > 2 else 'video.mp4'
+VOICE = sys.argv[3] if len(sys.argv) > 3 else 'voice-1.mp3'
+TEMPO_ARG = float(sys.argv[4]) if len(sys.argv) > 4 else 1.03
+OUTWAV = sys.argv[5] if len(sys.argv) > 5 else 'mix.wav'
+cues = json.load(open(f'{WD}/{VID}.cues.json'))
 SR = 48000
 TOTAL = 45.0
 rng = np.random.default_rng(7)
@@ -60,7 +64,7 @@ with wave.open(f'{WD}/sfx.wav', 'wb') as w:
     w.setnchannels(1); w.setsampwidth(2); w.setframerate(SR)
     w.writeframes((out * 32767).astype(np.int16).tobytes())
 
-TEMPO, LEAD = 1.03, 0.2
+TEMPO, LEAD = TEMPO_ARG, 0.2
 fc = (
     f"[0:a]atempo={TEMPO},aresample=48000,adelay={int(LEAD*1000)}:all=1,loudnorm=I=-16:TP=-1.5:LRA=7,aresample=48000,apad,asplit=2[v][v2];"
     f"[1:a]aresample=48000,volume=0.22,afade=t=in:d=0.3,afade=t=out:st={TOTAL-1.5}:d=1.5[m];"
@@ -69,5 +73,5 @@ fc = (
     f"[v2][md][s]amix=inputs=3:normalize=0:duration=first,atrim=0:{TOTAL},alimiter=limit=0.95[a]"
 )
 subprocess.run(['ffmpeg', '-y', '-hide_banner', '-loglevel', 'error',
-                '-i', f'{WD}/voice-1.mp3', '-i', f'{WD}/music.mp3', '-i', f'{WD}/sfx.wav',
-                '-filter_complex', fc, '-map', '[a]', '-ar', '48000', '-ac', '2', f'{WD}/mix.wav'], check=True)
+                '-i', f'{WD}/{VOICE}', '-i', f'{WD}/music.mp3', '-i', f'{WD}/sfx.wav',
+                '-filter_complex', fc, '-map', '[a]', '-ar', '48000', '-ac', '2', f'{WD}/{OUTWAV}'], check=True)
